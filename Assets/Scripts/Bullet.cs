@@ -15,4 +15,14 @@ public class Bullet : MonoBehaviour
         // Di chuyển viên đạn theo hướng của nó
         transform.Translate(Vector2.up * speed * Time.deltaTime);
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        // Kiểm tra xem đối tượng bị va chạm có Tag là "Enemy" hay không
+        if (collision.CompareTag("Enemy"))
+        {
+            // Hủy đạn sau khi va chạm với quái vật
+            Destroy(gameObject);
+        }
+    }
 }

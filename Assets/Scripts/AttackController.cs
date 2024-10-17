@@ -50,7 +50,11 @@ public class AttackController : MonoBehaviour
         firePoint.rotation = Quaternion.Euler(0, 0, angle - 90f); // Xoay điểm bắn
 
         // Bắn đạn
-        Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+
+        // Bỏ qua va chạm giữa đạn và người chơi
+        Physics2D.IgnoreCollision(bullet.GetComponent<Collider2D>(), GetComponent<Collider2D>());
+
     }
 
     GameObject FindNearestEnemy()

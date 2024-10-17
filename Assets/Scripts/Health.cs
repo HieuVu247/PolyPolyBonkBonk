@@ -2,38 +2,38 @@ using UnityEngine;
 
 public class Health : MonoBehaviour
 {
-    public int maxHP = 100;          // HP tối đa
-    [SerializeField] private int currentHP;           // HP hiện tại
+    public float maxHealth = 100f;
+    private float currentHealth;
 
-    // Sự kiện khi đối tượng bị tiêu diệt
-    public delegate void OnDeath();
-    public event OnDeath onDeath;
+    public EnemyHealthBar healthBar; // Tham chiếu tới thanh HP của Enemy
 
-    void Start()
+    private void Start()
     {
-        // Khởi tạo HP hiện tại bằng HP tối đa
-        currentHP = maxHP;
+        currentHealth = maxHealth;
+        UpdateHealthBar();
     }
 
-    // Hàm nhận sát thương
-    public void TakeDamage(int damage)
+    public void TakeDamage(float damage)
     {
-        currentHP -= damage;
-
-        // Kiểm tra HP có <= 0 không
-        if (currentHP <= 0)
+        currentHealth -= damage;
+        if (currentHealth <= 0)
         {
-            if (onDeath != null)
-            {
-                onDeath.Invoke();  // Gọi sự kiện tiêu diệt nếu đã được đăng ký
-            }
-            Destroy(gameObject);   // Tiêu diệt đối tượng nếu hết máu
+            Die();
+        }
+        UpdateHealthBar();
+    }
+
+    private void UpdateHealthBar()
+    {
+        if (healthBar != null)
+        {
+            healthBar.SetHealth(currentHealth, maxHealth); // Cập nhật giá trị thanh HP
         }
     }
 
-    // Hàm hồi máu (nếu cần)
-    public void Heal(int amount)
+    private void Die()
     {
-        currentHP = Mathf.Clamp(currentHP + amount, 0, maxHP);
+        // Xử lý khi quái chết
+        Destroy(gameObject);
     }
 }
